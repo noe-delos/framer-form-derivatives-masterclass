@@ -7,8 +7,7 @@ interface EnrolledUser {
   id: string;
   name: string;
   email: string;
-  telephone: string;
-  enrolledAt: string;
+  enrolled_at: string;
 }
 
 const ITEMS_PER_PAGE = 10;
@@ -27,8 +26,7 @@ export default function EnrolledPage() {
   useEffect(() => {
     const filtered = users.filter(user => 
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      user.telephone.includes(searchQuery)
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredUsers(filtered);
     setCurrentPage(1);
@@ -82,7 +80,7 @@ export default function EnrolledPage() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="Rechercher par nom, email ou téléphone..."
+              placeholder="Rechercher par nom ou email..."
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -101,9 +99,6 @@ export default function EnrolledPage() {
                   Courriel
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Téléphone
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Inscrit le
                 </th>
               </tr>
@@ -118,10 +113,7 @@ export default function EnrolledPage() {
                     {user.email}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.telephone}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {formatDate(user.enrolledAt)}
+                    {formatDate(user.enrolled_at)}
                   </td>
                 </tr>
               ))}
