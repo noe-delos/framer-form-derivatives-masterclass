@@ -55,7 +55,7 @@ export default function EnrolledPage() {
   const currentUsers = filteredUsers.slice(startIndex, endIndex);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('fr-FR', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -67,7 +67,7 @@ export default function EnrolledPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Loading...</div>
+        <div className="text-lg">Chargement...</div>
       </div>
     );
   }
@@ -75,14 +75,14 @@ export default function EnrolledPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Enrolled Users</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Utilisateurs inscrits</h1>
         
         <div className="mb-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="Search by name, email, or phone..."
+              placeholder="Rechercher par nom, email ou téléphone..."
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -95,16 +95,16 @@ export default function EnrolledPage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Name
+                  Nom
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
+                  Courriel
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Phone
+                  Téléphone
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Enrolled At
+                  Inscrit le
                 </th>
               </tr>
             </thead>
@@ -130,7 +130,7 @@ export default function EnrolledPage() {
 
           {filteredUsers.length === 0 && (
             <div className="text-center py-8 text-gray-500">
-              No users found
+              Aucun utilisateur trouvé
             </div>
           )}
         </div>
@@ -138,7 +138,7 @@ export default function EnrolledPage() {
         {totalPages > 1 && (
           <div className="mt-6 flex items-center justify-between">
             <div className="text-sm text-gray-700">
-              Showing {startIndex + 1} to {Math.min(endIndex, filteredUsers.length)} of {filteredUsers.length} results
+              Affichage de {startIndex + 1} à {Math.min(endIndex, filteredUsers.length)} sur {filteredUsers.length} résultats
             </div>
             <div className="flex space-x-2">
               <button
