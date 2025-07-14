@@ -9,8 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/better-sqlite3": "^7.6.13",
-    "better-sqlite3": "^12.2.0",
+    "@supabase/supabase-js": "^2.50.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.525.0",

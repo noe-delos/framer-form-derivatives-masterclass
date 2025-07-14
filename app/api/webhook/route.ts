@@ -94,10 +94,10 @@ export async function POST(request: NextRequest) {
 
     console.log('👤 Processing enrollment for:', { name, email });
 
-    const userCount = getUserCount();
+    const userCount = await getUserCount();
     console.log('📋 Current enrolled users count:', userCount);
     
-    const existingUser = getUserByEmail(email);
+    const existingUser = await getUserByEmail(email);
     
     if (existingUser) {
       console.log('ℹ️ User already enrolled:', email);
@@ -108,13 +108,13 @@ export async function POST(request: NextRequest) {
         email
       };
       
-      console.log('➕ Adding new user to database');
-      const success = addUser(newUser);
+      console.log('➕ Adding new user to Supabase');
+      const success = await addUser(newUser);
       
       if (success) {
-        console.log('💾 User data saved successfully to SQLite database');
+        console.log('💾 User data saved successfully to Supabase');
       } else {
-        console.error('❌ Failed to save user to database');
+        console.error('❌ Failed to save user to Supabase');
         return NextResponse.json(
           { error: 'Failed to save user' },
           { status: 500 }

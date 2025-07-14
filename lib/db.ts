@@ -1,22 +1,9 @@
-import Database from 'better-sqlite3';
-import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 
-const dbPath = path.join(process.cwd(), 'data', 'enrolled.db');
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-console.log('🗄️ SQLite database path:', dbPath);
-
-const db = new Database(dbPath);
-
-db.exec(`
-  CREATE TABLE IF NOT EXISTS enrolled_users (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    enrolled_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  )
-`);
-
-console.log('✅ Database table initialized');
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export interface EnrolledUser {
   id: string;
@@ -25,44 +12,71 @@ export interface EnrolledUser {
   enrolled_at: string;
 }
 
-export function getAllUsers(): EnrolledUser[] {
-  console.log('📋 Fetching all enrolled users from database');
-  const stmt = db.prepare('SELECT * FROM enrolled_users ORDER BY enrolled_at DESC');
-  const users = stmt.all() as EnrolledUser[];
-  console.log(`✅ Found ${users.length} users`);
-  return users;
-}
-
-export function getUserByEmail(email: string): EnrolledUser | undefined {
-  console.log('🔍 Checking if user exists:', email);
-  const stmt = db.prepare('SELECT * FROM enrolled_users WHERE email = ?');
-  const user = stmt.get(email) as EnrolledUser | undefined;
-  console.log('👤 User found:', !!user);
-  return user;
-}
-
-export function addUser(user: Omit<EnrolledUser, 'enrolled_at'>): boolean {
-  console.log('➕ Adding new user to database:', { name: user.name, email: user.email });
+export async function getAllUsers(): Promise<EnrolledUser[]> {
+  console.log('📋 Fetching all enrolled users from Supabase');
   
-  try {
-    const stmt = db.prepare(`
-      INSERT INTO enrolled_users (id, name, email)
-      VALUES (?, ?, ?)
-    `);
-    
-    const result = stmt.run(user.id, user.name, user.email);
-    console.log('✅ User added successfully, rows affected:', result.changes);
-    return result.changes > 0;
-  } catch (error) {
+  const { data, error } = await supabase
+    .from('MASTERCLASS-ENROLLED')
+    .select('*')
+    .order('enrolled_at', { ascending: false });
+
+  if (error) {
+    console.error('❌ Error fetching users:', error);
+    return [];
+  }
+
+  console.log(`✅ Found ${data?.length || 0} users`);
+  return data || [];
+}
+
+export async function getUserByEmail(email: string): Promise<EnrolledUser | null> {
+  console.log('🔍 Checking if user exists:', email);
+  
+  const { data, error } = await supabase
+    .from('MASTERCLASS-ENROLLED')
+    .select('*')
+    .eq('email', email)
+    .single();
+
+  if (error && error.code !== 'PGRST116') {
+    console.error('❌ Error checking user:', error);
+    return null;
+  }
+
+  console.log('👤 User found:', !!data);
+  return data;
+}
+
+export async function addUser(user: Omit<EnrolledUser, 'enrolled_at'>): Promise<boolean> {
+  console.log('➕ Adding new user to Supabase:', { name: user.name, email: user.email });
+  
+  const { data, error } = await supabase
+    .from('MASTERCLASS-ENROLLED')
+    .insert({
+      id: user.id,
+      name: user.name,
+      email: user.email
+    })
+    .select();
+
+  if (error) {
     console.error('❌ Failed to add user:', error);
     return false;
   }
+
+  console.log('✅ User added successfully:', data);
+  return true;
 }
 
-export function getUserCount(): number {
-  const stmt = db.prepare('SELECT COUNT(*) as count FROM enrolled_users');
-  const result = stmt.get() as { count: number };
-  return result.count;
-}
+export async function getUserCount(): Promise<number> {
+  const { count, error } = await supabase
+    .from('MASTERCLASS-ENROLLED')
+    .select('*', { count: 'exact', head: true });
 
-export default db;
+  if (error) {
+    console.error('❌ Error getting user count:', error);
+    return 0;
+  }
+
+  return count || 0;
+}
