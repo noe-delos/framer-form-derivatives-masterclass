@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Users, TrendingUp, Building2 } from 'lucide-react';
 
 interface EnrolledUser {
   id: string;
@@ -64,56 +64,82 @@ export default function EnrolledPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-lg">Chargement...</div>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">
+          <div className="animate-pulse flex flex-col items-center">
+            <TrendingUp className="h-12 w-12 mb-4 text-yellow-400" />
+            <div className="text-lg">Chargement des futurs traders...</div>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-black py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Utilisateurs inscrits</h1>
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <Building2 className="h-8 w-8 text-yellow-400" />
+            <h1 className="text-4xl font-bold text-white">Futurs Traders en Finance de Marché</h1>
+          </div>
+          <p className="text-gray-400 text-lg">Candidats inscrits pour décrocher leur Summer chez Goldman Sachs, JP Morgan, BNP Paribas...</p>
+          <div className="flex items-center gap-6 mt-4">
+            <div className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-yellow-400" />
+              <span className="text-white font-semibold">{users.length} inscrits</span>
+            </div>
+            <div className="text-yellow-400 font-bold">🚨 Places limitées</div>
+          </div>
+        </div>
         
         <div className="mb-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
             <input
               type="text"
-              placeholder="Rechercher par nom ou email..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Rechercher un futur trader..."
+              className="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all duration-200"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>
 
-        <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+        <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shadow-2xl">
+          <table className="min-w-full divide-y divide-gray-800">
+            <thead className="bg-gray-950">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Nom
+                <th className="px-6 py-4 text-left text-xs font-semibold text-yellow-400 uppercase tracking-wider">
+                  Candidat
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Courriel
+                <th className="px-6 py-4 text-left text-xs font-semibold text-yellow-400 uppercase tracking-wider">
+                  Contact
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Inscrit le
+                <th className="px-6 py-4 text-left text-xs font-semibold text-yellow-400 uppercase tracking-wider">
+                  Date d'inscription
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {currentUsers.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {user.name}
+            <tbody className="divide-y divide-gray-800">
+              {currentUsers.map((user, index) => (
+                <tr key={user.id} className="hover:bg-gray-800/50 transition-colors duration-150">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10 bg-yellow-400/10 rounded-full flex items-center justify-center">
+                        <span className="text-yellow-400 font-bold text-sm">{user.name.charAt(0).toUpperCase()}</span>
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-white">{user.name}</div>
+                        <div className="text-xs text-gray-500">Candidat #{users.length - index}</div>
+                      </div>
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.email}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-300">{user.email}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {formatDate(user.enrolled_at)}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-400">{formatDate(user.enrolled_at)}</div>
                   </td>
                 </tr>
               ))}
@@ -121,42 +147,57 @@ export default function EnrolledPage() {
           </table>
 
           {filteredUsers.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              Aucun utilisateur trouvé
+            <div className="text-center py-12">
+              <div className="text-gray-500">Aucun candidat trouvé</div>
+              <div className="text-gray-600 text-sm mt-2">Essayez avec d'autres critères de recherche</div>
             </div>
           )}
         </div>
 
         {totalPages > 1 && (
-          <div className="mt-6 flex items-center justify-between">
-            <div className="text-sm text-gray-700">
-              Affichage de {startIndex + 1} à {Math.min(endIndex, filteredUsers.length)} sur {filteredUsers.length} résultats
+          <div className="mt-8 flex items-center justify-between">
+            <div className="text-sm text-gray-400">
+              Affichage de {startIndex + 1} à {Math.min(endIndex, filteredUsers.length)} sur {filteredUsers.length} futurs traders
             </div>
-            <div className="flex space-x-2">
+            <div className="flex items-center space-x-2">
               <button
                 onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 rounded-lg bg-gray-900 border border-gray-800 text-gray-400 hover:text-yellow-400 hover:border-yellow-400/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`px-3 py-1 rounded-md text-sm font-medium ${
-                    currentPage === page
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+              <div className="flex space-x-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`w-10 h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
+                        currentPage === pageNum
+                          ? 'bg-yellow-400 text-black'
+                          : 'bg-gray-900 border border-gray-800 text-gray-400 hover:text-yellow-400 hover:border-yellow-400/50'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
               <button
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 rounded-md bg-white border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 rounded-lg bg-gray-900 border border-gray-800 text-gray-400 hover:text-yellow-400 hover:border-yellow-400/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
