@@ -78,14 +78,25 @@ export async function POST(request: NextRequest) {
     const data = JSON.parse(bodyBuffer.toString());
     console.log('📊 Parsed webhook data:', {
       fields: Object.keys(data),
+      fullData: data,
       hasName: !!data.name,
-      hasEmail: !!data.email
+      hasEmail: !!data.email,
+      hasNameCap: !!data.Name,
+      hasEmailCap: !!data.Email
     });
     
-    const { name, email } = data;
+    // Handle both lowercase and capitalized field names
+    const name = data.name || data.Name;
+    const email = data.email || data.Email;
+
+    console.log('🔍 Extracted values:', { name, email });
 
     if (!name || !email) {
-      console.error('❌ Missing required fields:', { name: !!name, email: !!email });
+      console.error('❌ Missing required fields:', { 
+        name: !!name, 
+        email: !!email,
+        availableFields: Object.keys(data)
+      });
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
