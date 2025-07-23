@@ -10,6 +10,11 @@ export interface EnrolledUser {
   name: string;
   email: string;
   enrolled_at: string;
+  location?: string;
+  newsletter?: boolean;
+  niveau_etudes?: string;
+  telephone?: string;
+  ecole?: string;
 }
 
 export async function getAllUsers(): Promise<EnrolledUser[]> {
@@ -55,7 +60,12 @@ export async function addUser(user: Omit<EnrolledUser, 'enrolled_at'>): Promise<
     .insert({
       id: user.id,
       name: user.name,
-      email: user.email
+      email: user.email,
+      location: user.location,
+      newsletter: user.newsletter,
+      niveau_etudes: user.niveau_etudes,
+      telephone: user.telephone,
+      ecole: user.ecole
     })
     .select();
 

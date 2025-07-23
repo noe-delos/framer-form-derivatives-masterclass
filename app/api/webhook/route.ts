@@ -88,8 +88,21 @@ export async function POST(request: NextRequest) {
     // Handle both lowercase and capitalized field names
     const name = data.name || data.Name;
     const email = data.email || data.Email;
+    const location = data.Location;
+    const newsletter = data.Newsletter === 'on';
+    const niveauEtudes = data['Niveau d\'études'];
+    const telephone = data['Téléphone'];
+    const ecole = data['École'];
 
-    console.log('🔍 Extracted values:', { name, email });
+    console.log('🔍 Extracted values:', { 
+      name, 
+      email,
+      location,
+      newsletter,
+      niveauEtudes,
+      telephone,
+      ecole
+    });
 
     if (!name || !email) {
       console.error('❌ Missing required fields:', { 
@@ -116,7 +129,12 @@ export async function POST(request: NextRequest) {
       const newUser = {
         id: submissionId,
         name,
-        email
+        email,
+        location,
+        newsletter,
+        niveau_etudes: niveauEtudes,
+        telephone,
+        ecole
       };
       
       console.log('➕ Adding new user to Supabase');
