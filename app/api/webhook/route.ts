@@ -88,9 +88,9 @@ export async function POST(request: NextRequest) {
     // Handle both lowercase and capitalized field names
     const name = data.name || data.Name;
     const email = data.email || data.Email;
-    const location = data.Location;
+    const location = data.Location; // This is actually the study level (L1, L2, L3, M1, M2)
     const newsletter = data.Newsletter === 'on';
-    const niveauEtudes = data['Niveau d\'études'];
+    const messagePersonnel = data['Niveau d\'études']; // This is the "tell us more" field
     const telephone = data['Téléphone'];
     const ecole = data['École'];
 
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
       email,
       location,
       newsletter,
-      niveauEtudes,
+      messagePersonnel,
       telephone,
       ecole
     });
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
         email,
         location,
         newsletter,
-        niveau_etudes: niveauEtudes,
+        message_personnel: messagePersonnel,
         telephone,
         ecole
       };

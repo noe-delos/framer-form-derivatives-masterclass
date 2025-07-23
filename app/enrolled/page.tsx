@@ -21,7 +21,7 @@ interface EnrolledUser {
   enrolled_at: string;
   location?: string;
   newsletter?: boolean;
-  niveau_etudes?: string;
+  message_personnel?: string;
   telephone?: string;
   ecole?: string;
 }
@@ -49,8 +49,8 @@ export default function EnrolledPage() {
         user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (user.ecole &&
           user.ecole.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (user.niveau_etudes &&
-          user.niveau_etudes
+        (user.message_personnel &&
+          user.message_personnel
             .toLowerCase()
             .includes(searchQuery.toLowerCase())) ||
         (user.location &&
@@ -281,7 +281,7 @@ export default function EnrolledPage() {
                   Niveau d'études
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-yellow-400 uppercase tracking-wider">
-                  Location
+                  Message
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-yellow-400 uppercase tracking-wider">
                   Newsletter
@@ -334,18 +334,18 @@ export default function EnrolledPage() {
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {user.niveau_etudes ? (
+                    {user.location ? (
                       <div className="text-sm text-gray-300">
-                        {user.niveau_etudes}
+                        {user.location}
                       </div>
                     ) : (
                       <div className="text-sm text-gray-500">-</div>
                     )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {user.location ? (
-                      <div className="text-sm text-gray-300">
-                        {user.location}
+                  <td className="px-6 py-4 max-w-xs">
+                    {user.message_personnel ? (
+                      <div className="text-sm text-gray-300 truncate" title={user.message_personnel}>
+                        {user.message_personnel}
                       </div>
                     ) : (
                       <div className="text-sm text-gray-500">-</div>
