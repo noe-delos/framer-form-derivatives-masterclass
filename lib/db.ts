@@ -12,7 +12,7 @@ export interface EnrolledUser {
   enrolled_at: string;
   location?: string;
   newsletter?: boolean;
-  message_personnel?: string;
+  notes?: string;
   telephone?: string;
   ecole?: string;
 }
@@ -63,7 +63,7 @@ export async function addUser(user: Omit<EnrolledUser, 'enrolled_at'>): Promise<
       email: user.email,
       location: user.location,
       newsletter: user.newsletter,
-      message_personnel: user.message_personnel,
+      notes: user.notes,
       telephone: user.telephone,
       ecole: user.ecole
     })

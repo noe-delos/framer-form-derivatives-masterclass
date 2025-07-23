@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
     const email = data.email || data.Email;
     const location = data.Location; // This is actually the study level (L1, L2, L3, M1, M2)
     const newsletter = data.Newsletter === 'on';
-    const messagePersonnel = data['Niveau d\'études']; // This is the "tell us more" field
+    const notes = data['Niveau d\'études']; // This is the notes/personal message field
     const telephone = data['Téléphone'];
     const ecole = data['École'];
 
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
       email,
       location,
       newsletter,
-      messagePersonnel,
+      notes,
       telephone,
       ecole
     });
@@ -132,7 +132,7 @@ export async function POST(request: NextRequest) {
         email,
         location,
         newsletter,
-        message_personnel: messagePersonnel,
+        notes,
         telephone,
         ecole
       };
